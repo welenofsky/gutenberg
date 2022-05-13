@@ -782,7 +782,7 @@ describe( 'readConfig', () => {
 					development: {
 						port: 1000,
 						config: {
-							WP_TESTS_DOMAIN: 'http://localhost:1000/',
+							WP_TESTS_DOMAIN: 'localhost',
 							WP_SITEURL: 'http://localhost:1000/',
 							WP_HOME: 'http://localhost:1000/',
 						},
@@ -790,7 +790,7 @@ describe( 'readConfig', () => {
 					tests: {
 						port: 2000,
 						config: {
-							WP_TESTS_DOMAIN: 'http://localhost:2000/',
+							WP_TESTS_DOMAIN: 'localhost',
 							WP_SITEURL: 'http://localhost:2000/',
 							WP_HOME: 'http://localhost:2000/',
 						},
@@ -818,7 +818,7 @@ describe( 'readConfig', () => {
 					development: {
 						port: 1000,
 						config: {
-							WP_TESTS_DOMAIN: 'http://localhost:1000/',
+							WP_TESTS_DOMAIN: 'localhost',
 							WP_SITEURL: 'http://localhost:1000/',
 							WP_HOME: 'http://localhost:3000/',
 						},
@@ -826,7 +826,7 @@ describe( 'readConfig', () => {
 					tests: {
 						port: 2000,
 						config: {
-							WP_TESTS_DOMAIN: 'http://localhost:2000/',
+							WP_TESTS_DOMAIN: 'localhost',
 							WP_SITEURL: 'http://localhost:2000/',
 							WP_HOME: 'http://localhost:3000/',
 						},
@@ -1081,7 +1081,7 @@ describe( 'readConfig', () => {
 				WP_PHP_BINARY: 'php',
 				WP_TESTS_EMAIL: 'admin@example.org',
 				WP_TESTS_TITLE: 'Test Blog',
-				WP_TESTS_DOMAIN: 'http://localhost:8889/',
+				WP_TESTS_DOMAIN: 'localhost',
 				WP_SITEURL: 'http://localhost:8889/',
 				WP_HOME: 'http://localhost:8889/',
 			} );
@@ -1095,7 +1095,7 @@ describe( 'readConfig', () => {
 				WP_PHP_BINARY: 'php',
 				WP_TESTS_EMAIL: 'admin@example.org',
 				WP_TESTS_TITLE: 'Test Blog',
-				WP_TESTS_DOMAIN: 'http://localhost:8888/',
+				WP_TESTS_DOMAIN: 'localhost',
 				WP_SITEURL: 'http://localhost:8888/',
 				WP_HOME: 'http://localhost:8888/',
 			} );
