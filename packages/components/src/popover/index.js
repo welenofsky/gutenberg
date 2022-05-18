@@ -115,6 +115,7 @@ const Popover = (
 		__unstableSlotName = SLOT_NAME,
 		__unstableObserveElement,
 		__unstableForcePosition,
+		__unstableShift = false,
 		...contentProps
 	},
 	ref
@@ -190,12 +191,13 @@ const Popover = (
 						} );
 					},
 			  } ),
-		,
-		shift( {
-			crossAxis: true,
-			limiter: limitShift(),
-			padding: 1, // Necessary to avoid flickering at the edge of the viewport.
-		} ),
+		__unstableShift
+			? shift( {
+					crossAxis: true,
+					limiter: limitShift(),
+					padding: 1, // Necessary to avoid flickering at the edge of the viewport.
+			  } )
+			: undefined,
 		hasArrow ? arrow( { element: arrowRef } ) : undefined,
 	].filter( ( m ) => !! m );
 	const anchorRefFallback = useRef( null );
@@ -271,13 +273,12 @@ const Popover = (
 			usedRef = {
 				getBoundingClientRect() {
 					const rect = getAnchorRect();
-					return {
-						...rect,
-						x: rect.x ?? rect.left,
-						y: rect.y ?? rect.top,
-						height: rect.height ?? rect.bottom - rect.top,
-						width: rect.width ?? rect.right - rect.left,
-					};
+					return new window.DOMRect(
+						rect.x ?? rect.left,
+						rect.y ?? rect.top,
+						rect.width ?? rect.right - rect.left,
+						rect.height ?? rect.bottom - rect.top
+					);
 				},
 			};
 		} else if ( anchorRefFallback.current ) {
