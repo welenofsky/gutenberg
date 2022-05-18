@@ -44,6 +44,7 @@ import CoverInspectorControls from './inspector-controls';
 import CoverBlockControls from './block-controls';
 import CoverPlaceholder from './cover-placeholder';
 import ResizableCover from './resizable-cover';
+import ResizableCoverPopover from './resizable-cover-popover';
 
 extend( [ namesPlugin ] );
 
@@ -302,14 +303,15 @@ function CoverEdit( {
 				coverRef={ ref }
 				currentSettings={ currentSettings }
 			/>
-			<div
-				{ ...blockProps }
-				className={ classnames( classes, blockProps.className ) }
-				style={ { ...style, ...blockProps.style } }
-				data-url={ url }
-			>
-				<ResizableCover
+			{ isSelected && (
+				<ResizableCoverPopover
+					clientId={ clientId }
 					className="block-library-cover__resize-container"
+					minHeight={ parseFloat( minHeight ) }
+					size={ {
+						height: minHeight ? parseFloat( minHeight ) : 'auto',
+						width: 'inherit',
+					} }
 					onResizeStart={ () => {
 						setAttributes( { minHeightUnit: 'px' } );
 						toggleSelection( false );
@@ -323,7 +325,13 @@ function CoverEdit( {
 					} }
 					showHandle={ isSelected }
 				/>
-
+			) }
+			<div
+				{ ...blockProps }
+				className={ classnames( classes, blockProps.className ) }
+				style={ { ...style, ...blockProps.style } }
+				data-url={ url }
+			>
 				<span
 					aria-hidden="true"
 					className={ classnames(

@@ -83,10 +83,10 @@
 	min-height: 50px;
 }
 
-.block-library-cover__resize-container:not(.is-resizing) {
-	// Important is used to have higher specificity than the inline style set by re-resizable library.
-	height: auto !important;
-}
+// .block-library-cover__resize-container:not(.is-resizing) {
+// 	// Important is used to have higher specificity than the inline style set by re-resizable library.
+// 	height: auto !important;
+// }
 
 // When uploading background images, show a transparent overlay.
 .wp-block-cover > .components-drop-zone .components-drop-zone__content {
