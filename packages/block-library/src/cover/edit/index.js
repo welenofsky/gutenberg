@@ -11,7 +11,7 @@ import namesPlugin from 'colord/plugins/names';
 import { useEntityProp, store as coreStore } from '@wordpress/core-data';
 import { useEffect, useRef } from '@wordpress/element';
 import { Spinner } from '@wordpress/components';
-import { compose } from '@wordpress/compose';
+import { compose, useResizeObserver } from '@wordpress/compose';
 import {
 	withColors,
 	ColorPalette,
@@ -151,6 +151,7 @@ function CoverEdit( {
 	const isImageBackground = IMAGE_BACKGROUND_TYPE === backgroundType;
 	const isVideoBackground = VIDEO_BACKGROUND_TYPE === backgroundType;
 
+	const [ resizeListener, { height, width } ] = useResizeObserver();
 	const minHeightWithUnit =
 		minHeight && minHeightUnit
 			? `${ minHeight }${ minHeightUnit }`
@@ -308,10 +309,6 @@ function CoverEdit( {
 					clientId={ clientId }
 					className="block-library-cover__resize-container"
 					minHeight={ parseFloat( minHeight ) }
-					size={ {
-						height: minHeight ? parseFloat( minHeight ) : 'auto',
-						width: 'inherit',
-					} }
 					onResizeStart={ () => {
 						setAttributes( { minHeightUnit: 'px' } );
 						toggleSelection( false );
@@ -324,6 +321,12 @@ function CoverEdit( {
 						setAttributes( { minHeight: newMinHeight } );
 					} }
 					showHandle={ isSelected }
+					size={ {
+						height: minHeight ? parseFloat( minHeight ) : 'auto',
+						width: 'auto',
+					} }
+					width={ width }
+					height={ height }
 				/>
 			) }
 			<div
@@ -332,6 +335,7 @@ function CoverEdit( {
 				style={ { ...style, ...blockProps.style } }
 				data-url={ url }
 			>
+				{ resizeListener }
 				<span
 					aria-hidden="true"
 					className={ classnames(
