@@ -220,6 +220,27 @@ function CoverEdit( {
 		overlayColor,
 	};
 
+	const resizableCoverProps = {
+		className: 'block-library-cover__resize-container',
+		clientId,
+		height,
+		minHeight: parseFloat( minHeight ),
+		onResizeStart: () => {
+			setAttributes( { minHeightUnit: 'px' } );
+			toggleSelection( false );
+		},
+		onResize: ( value ) => {
+			setAttributes( { minHeight: value } );
+		},
+		onResizeStop: ( newMinHeight ) => {
+			toggleSelection( true );
+			setAttributes( { minHeight: newMinHeight } );
+		},
+		showHandle: true,
+		size: resizableBoxDimensions,
+		width,
+	};
+
 	if ( ! hasInnerBlocks && ! hasBackground ) {
 		return (
 			<>
@@ -238,26 +259,7 @@ function CoverEdit( {
 					currentSettings={ currentSettings }
 				/>
 				{ isSelected && (
-					<ResizableCoverPopover
-						clientId={ clientId }
-						className="block-library-cover__resize-container is-placeholder"
-						minHeight={ parseFloat( minHeight ) }
-						onResizeStart={ () => {
-							setAttributes( { minHeightUnit: 'px' } );
-							toggleSelection( false );
-						} }
-						onResize={ ( value ) => {
-							setAttributes( { minHeight: value } );
-						} }
-						onResizeStop={ ( newMinHeight ) => {
-							toggleSelection( true );
-							setAttributes( { minHeight: newMinHeight } );
-						} }
-						showHandle={ true }
-						size={ { height: 'auto', width: 'auto' } }
-						width={ width }
-						height={ height }
-					/>
+					<ResizableCoverPopover { ...resizableCoverProps } />
 				) }
 				<div
 					{ ...blockProps }
@@ -319,28 +321,6 @@ function CoverEdit( {
 				coverRef={ ref }
 				currentSettings={ currentSettings }
 			/>
-			{ isSelected && (
-				<ResizableCoverPopover
-					clientId={ clientId }
-					className="block-library-cover__resize-container"
-					minHeight={ parseFloat( minHeight ) }
-					onResizeStart={ () => {
-						setAttributes( { minHeightUnit: 'px' } );
-						toggleSelection( false );
-					} }
-					onResize={ ( value ) => {
-						setAttributes( { minHeight: value } );
-					} }
-					onResizeStop={ ( newMinHeight ) => {
-						toggleSelection( true );
-						setAttributes( { minHeight: newMinHeight } );
-					} }
-					showHandle
-					size={ resizableBoxDimensions }
-					width={ width }
-					height={ height }
-				/>
-			) }
 			<div
 				{ ...blockProps }
 				className={ classnames( classes, blockProps.className ) }
@@ -396,6 +376,9 @@ function CoverEdit( {
 				/>
 				<div { ...innerBlocksProps } />
 			</div>
+			{ isSelected && (
+				<ResizableCoverPopover { ...resizableCoverProps } />
+			) }
 		</>
 	);
 }
