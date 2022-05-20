@@ -9,7 +9,7 @@ import namesPlugin from 'colord/plugins/names';
  * WordPress dependencies
  */
 import { useEntityProp, store as coreStore } from '@wordpress/core-data';
-import { useEffect, useRef } from '@wordpress/element';
+import { useEffect, useMemo, useRef } from '@wordpress/element';
 import { Spinner } from '@wordpress/components';
 import { compose, useResizeObserver } from '@wordpress/compose';
 import {
@@ -43,7 +43,6 @@ import useCoverIsDark from './use-cover-is-dark';
 import CoverInspectorControls from './inspector-controls';
 import CoverBlockControls from './block-controls';
 import CoverPlaceholder from './cover-placeholder';
-import ResizableCover from './resizable-cover';
 import ResizableCoverPopover from './resizable-cover-popover';
 
 extend( [ namesPlugin ] );
@@ -152,6 +151,13 @@ function CoverEdit( {
 	const isVideoBackground = VIDEO_BACKGROUND_TYPE === backgroundType;
 
 	const [ resizeListener, { height, width } ] = useResizeObserver();
+	const resizableBoxDimensions = useMemo( () => {
+		return {
+			height: minHeight ? parseFloat( minHeight ) : 'auto',
+			width: 'auto',
+		};
+	}, [ minHeight ] );
+
 	const minHeightWithUnit =
 		minHeight && minHeightUnit
 			? `${ minHeight }${ minHeightUnit }`
@@ -231,31 +237,11 @@ function CoverEdit( {
 					coverRef={ ref }
 					currentSettings={ currentSettings }
 				/>
-				<div
-					{ ...blockProps }
-					className={ classnames(
-						'is-placeholder',
-						blockProps.className
-					) }
-				>
-					<CoverPlaceholder
-						onSelectMedia={ onSelectMedia }
-						onError={ onUploadError }
-						style={ {
-							minHeight: minHeightWithUnit || undefined,
-						} }
-					>
-						<div className="wp-block-cover__placeholder-background-options">
-							<ColorPalette
-								disableCustomColors={ true }
-								value={ overlayColor.color }
-								onChange={ setOverlayColor }
-								clearable={ false }
-							/>
-						</div>
-					</CoverPlaceholder>
-					<ResizableCover
-						className="block-library-cover__resize-container"
+				{ isSelected && (
+					<ResizableCoverPopover
+						clientId={ clientId }
+						className="block-library-cover__resize-container is-placeholder"
+						minHeight={ parseFloat( minHeight ) }
 						onResizeStart={ () => {
 							setAttributes( { minHeightUnit: 'px' } );
 							toggleSelection( false );
@@ -267,8 +253,37 @@ function CoverEdit( {
 							toggleSelection( true );
 							setAttributes( { minHeight: newMinHeight } );
 						} }
-						showHandle={ isSelected }
+						showHandle={ true }
+						size={ { height: 'auto', width: 'auto' } }
+						width={ width }
+						height={ height }
 					/>
+				) }
+				<div
+					{ ...blockProps }
+					className={ classnames(
+						'is-placeholder',
+						blockProps.className
+					) }
+					style={ {
+						...blockProps.style,
+						minHeight: minHeightWithUnit || undefined,
+					} }
+				>
+					{ resizeListener }
+					<CoverPlaceholder
+						onSelectMedia={ onSelectMedia }
+						onError={ onUploadError }
+					>
+						<div className="wp-block-cover__placeholder-background-options">
+							<ColorPalette
+								disableCustomColors={ true }
+								value={ overlayColor.color }
+								onChange={ setOverlayColor }
+								clearable={ false }
+							/>
+						</div>
+					</CoverPlaceholder>
 				</div>
 			</>
 		);
@@ -320,11 +335,8 @@ function CoverEdit( {
 						toggleSelection( true );
 						setAttributes( { minHeight: newMinHeight } );
 					} }
-					showHandle={ isSelected }
-					size={ {
-						height: minHeight ? parseFloat( minHeight ) : 'auto',
-						width: 'auto',
-					} }
+					showHandle
+					size={ resizableBoxDimensions }
 					width={ width }
 					height={ height }
 				/>

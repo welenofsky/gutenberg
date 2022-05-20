@@ -31,7 +31,7 @@ export default function ResizableCoverPopover( {
 	...props
 } ) {
 	const [ isResizing, setIsResizing ] = useState( false );
-	const dimensions = useMemo( () => ( { height, width } ), [
+	const dimensions = useMemo( () => ( { height, minHeight, width } ), [
 		minHeight,
 		height,
 		width,
