@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Restrict `WP_TESTS_DOMAIN` constant to just hostname and an entire URL (with scheme, port, and path).
+- Restrict `WP_TESTS_DOMAIN` constant to just hostname rather than an entire URL (e.g. it now excludes scheme, port, etc.)
 
 ## 4.7.0 (2022-05-18)
 
