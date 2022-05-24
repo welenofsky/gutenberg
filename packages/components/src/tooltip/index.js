@@ -273,15 +273,6 @@ function Tooltip( props ) {
 		...popoverData,
 	} );
 
-	// return (
-	// 	<ElementWithPopover
-	// 		child={ child }
-	// 		eventHandlers={ eventHandlers }
-	// 		childrenWithPopover={ childrenWithPopover }
-	// 		anchorRef={ childRef }
-	// 	/>
-	// );
-
 	return getElementWithPopover( {
 		child,
 		eventHandlers,
