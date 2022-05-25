@@ -194,7 +194,6 @@ const Popover = (
 		shift( {
 			crossAxis: true,
 			limiter: limitShift(),
-			padding: 4,
 		} ),
 		hasArrow ? arrow( { element: arrowRef } ) : undefined,
 	].filter( ( m ) => !! m );
