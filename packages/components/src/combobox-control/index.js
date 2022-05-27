@@ -82,7 +82,7 @@ function ComboboxControl( {
 		} );
 
 		return startsWithMatch.concat( containsMatch );
-	}, [ inputValue, options, value ] );
+	}, [ inputValue, options ] );
 
 	const onSuggestionSelected = ( newSelectedSuggestion ) => {
 		onChange( newSelectedSuggestion.value );
