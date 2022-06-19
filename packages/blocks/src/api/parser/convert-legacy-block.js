@@ -67,5 +67,11 @@ export function convertLegacyBlockNameAndAttributes( name, attributes ) {
 		name = 'core/comment-date';
 	}
 
+	// Checks needed after merging core/comments-query-loop and core/post-comments.
+
+	if ( name === 'core/post-comments' ) {
+		name = 'core/comments-query-loop';
+	}
+
 	return [ name, newAttributes ];
 }
