@@ -71,6 +71,7 @@ export function convertLegacyBlockNameAndAttributes( name, attributes ) {
 
 	if ( name === 'core/post-comments' ) {
 		name = 'core/comments-query-loop';
+		newAttributes.legacy = true;
 	}
 
 	return [ name, newAttributes ];

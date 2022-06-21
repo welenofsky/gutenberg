@@ -10,6 +10,9 @@
 		"tagName": {
 			"type": "string",
 			"default": "div"
+		},
+		"legacy": {
+			"type": "boolean"
 		}
 	},
 	"supports": {
