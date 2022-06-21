@@ -80,10 +80,19 @@ export default function BlockEditor( { setIsInserterOpen } ) {
 		[]
 	);
 
-	const blockPatterns = useMemo(
-		() => unionBy( settingsBlockPatterns, restBlockPatterns, 'name' ),
-		[ settingsBlockPatterns, restBlockPatterns ]
-	);
+	const blockPatterns = useMemo( () => {
+		return unionBy(
+			settingsBlockPatterns,
+			restBlockPatterns,
+			'name'
+		).filter( ( { postTypes } ) => {
+			return (
+				! postTypes ||
+				( Array.isArray( postTypes ) &&
+					postTypes.includes( templateType ) )
+			);
+		} );
+	}, [ settingsBlockPatterns, restBlockPatterns, templateType ] );
 
 	const blockPatternCategories = useMemo(
 		() =>

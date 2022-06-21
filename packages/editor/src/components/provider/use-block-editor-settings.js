@@ -36,8 +36,10 @@ function useBlockEditorSettings( settings, hasTemplate ) {
 		canUseUnfilteredHTML,
 		userCanCreatePages,
 		pageOnFront,
+		postType,
 	} = useSelect( ( select ) => {
-		const { canUserUseUnfilteredHTML } = select( editorStore );
+		const { canUserUseUnfilteredHTML, getCurrentPostType } =
+			select( editorStore );
 		const isWeb = Platform.OS === 'web';
 		const { canUser, getEntityRecord } = select( coreStore );
 
@@ -55,6 +57,7 @@ function useBlockEditorSettings( settings, hasTemplate ) {
 			hasUploadPermissions: canUser( 'create', 'media' ) ?? true,
 			userCanCreatePages: canUser( 'create', 'pages' ),
 			pageOnFront: siteSettings?.page_on_front,
+			postType: getCurrentPostType(),
 		};
 	}, [] );
 
@@ -74,10 +77,18 @@ function useBlockEditorSettings( settings, hasTemplate ) {
 		[]
 	);
 
-	const blockPatterns = useMemo(
-		() => unionBy( settingsBlockPatterns, restBlockPatterns, 'name' ),
-		[ settingsBlockPatterns, restBlockPatterns ]
-	);
+	const blockPatterns = useMemo( () => {
+		return unionBy(
+			settingsBlockPatterns,
+			restBlockPatterns,
+			'name'
+		).filter( ( { postTypes } ) => {
+			return (
+				! postTypes ||
+				( Array.isArray( postTypes ) && postTypes.includes( postType ) )
+			);
+		} );
+	}, [ settingsBlockPatterns, restBlockPatterns, postType ] );
 
 	const blockPatternCategories = useMemo(
 		() =>
