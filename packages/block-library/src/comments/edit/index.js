@@ -23,12 +23,12 @@ import { useEntityProp, store as coreStore } from '@wordpress/core-data';
  */
 import CommentsInspectorControls from './comments-inspector-controls';
 import Placeholder from './placeholder';
+import TEMPLATE from './template';
 
 export default function PostCommentsEdit( {
 	attributes,
 	setAttributes,
 	context: { postType, postId },
-	clientId,
 } ) {
 	const { tagName: TagName, textAlign } = attributes;
 
@@ -43,10 +43,6 @@ export default function PostCommentsEdit( {
 		( select ) =>
 			select( blockEditorStore ).getSettings()
 				.__experimentalDiscussionSettings
-	);
-
-	const innerBlocks = useSelect( ( select ) =>
-		select( blockEditorStore ).getBlocks( clientId )
 	);
 
 	const isSiteEditor = postType === undefined || postId === undefined;
@@ -92,9 +88,11 @@ export default function PostCommentsEdit( {
 			[ `has-text-align-${ textAlign }` ]: textAlign,
 		} ),
 	} );
-	const innerBlocksProps = useInnerBlocksProps( blockProps );
+	const innerBlocksProps = useInnerBlocksProps( blockProps, {
+		template: TEMPLATE,
+	} );
 
-	if ( innerBlocks.length > 0 ) {
+	if ( ! attributes.legacy ) {
 		return (
 			<>
 				<CommentsInspectorControls
