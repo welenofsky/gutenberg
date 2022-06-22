@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import {
@@ -39,13 +44,18 @@ const MAX_BORDER_RADIUS_VALUES = {
 /**
  * Control to display border radius options.
  *
- * @param {Object}   props          Component props.
- * @param {Function} props.onChange Callback to handle onChange.
- * @param {Object}   props.values   Border radius values.
+ * @param {Object}   props                       Component props.
+ * @param {Function} props.onChange              Callback to handle onChange.
+ * @param {Object}   props.values                Border radius values.
+ * @param {boolean}  props.__next40pxDefaultSize Toggles default height to 40px.
  *
  * @return {WPElement}              Custom border radius control.
  */
-export default function BorderRadiusControl( { onChange, values } ) {
+export default function BorderRadiusControl( {
+	onChange,
+	values,
+	__next40pxDefaultSize = false,
+} ) {
 	const [ isLinked, setIsLinked ] = useState(
 		! hasDefinedValues( values ) || ! hasMixedValues( values )
 	);
@@ -68,10 +78,14 @@ export default function BorderRadiusControl( { onChange, values } ) {
 		onChange( next !== undefined ? `${ next }${ unit }` : undefined );
 	};
 
+	const classes = classnames( 'components-border-radius-control__wrapper', {
+		'has-40px-default-size': __next40pxDefaultSize,
+	} );
+
 	return (
 		<fieldset className="components-border-radius-control">
 			<legend>{ __( 'Radius' ) }</legend>
-			<div className="components-border-radius-control__wrapper">
+			<div className={ classes }>
 				{ isLinked ? (
 					<>
 						<AllInputControl
@@ -80,6 +94,7 @@ export default function BorderRadiusControl( { onChange, values } ) {
 							min={ MIN_BORDER_RADIUS_VALUE }
 							onChange={ onChange }
 							units={ units }
+							__next40pxDefaultSize={ __next40pxDefaultSize }
 						/>
 						<RangeControl
 							className="components-border-radius-control__range-control"
@@ -98,6 +113,7 @@ export default function BorderRadiusControl( { onChange, values } ) {
 						onChange={ onChange }
 						values={ values || DEFAULT_VALUES }
 						units={ units }
+						__next40pxDefaultSize={ __next40pxDefaultSize }
 					/>
 				) }
 				<LinkedButton onClick={ toggleLinked } isLinked={ isLinked } />

@@ -48,7 +48,7 @@ export type BorderBoxControlProps = ColorProps &
 		 *
 		 * @default false
 		 */
-		__next36pxDefaultSize?: boolean;
+		__next40pxDefaultSize?: boolean;
 	};
 
 export type LinkedButtonProps = {
@@ -70,7 +70,7 @@ export type LinkedButtonProps = {
 	 *
 	 * @default false
 	 */
-	__next36pxDefaultSize?: boolean;
+	__next40pxDefaultSize?: boolean;
 };
 
 export type VisualizerProps = {
@@ -86,7 +86,7 @@ export type VisualizerProps = {
 	 *
 	 * @default false
 	 */
-	__next36pxDefaultSize?: boolean;
+	__next40pxDefaultSize?: boolean;
 };
 
 export type SplitControlsProps = ColorProps & {
@@ -120,5 +120,5 @@ export type SplitControlsProps = ColorProps & {
 	 *
 	 * @default false
 	 */
-	__next36pxDefaultSize?: boolean;
+	__next40pxDefaultSize?: boolean;
 };

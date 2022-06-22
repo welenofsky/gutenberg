@@ -9,7 +9,12 @@ import { __ } from '@wordpress/i18n';
  */
 import { getAllValue, hasMixedValues, hasDefinedValues } from './utils';
 
-export default function AllInputControl( { onChange, values, ...props } ) {
+export default function AllInputControl( {
+	onChange,
+	values,
+	__next40pxDefaultSize,
+	...props
+} ) {
 	const allValue = getAllValue( values );
 	const hasValues = hasDefinedValues( values );
 	const isMixed = hasValues && hasMixedValues( values );
@@ -24,6 +29,7 @@ export default function AllInputControl( { onChange, values, ...props } ) {
 			value={ allValue }
 			onChange={ onChange }
 			placeholder={ allPlaceholder }
+			size={ __next40pxDefaultSize ? '__unstable-large' : undefined }
 		/>
 	);
 }
