@@ -52,12 +52,16 @@ function render_block_core_comments_query_loop( $attributes, $content, $block ) 
 	remove_filter( 'deprecated_file_trigger_error', '__return_false' );
 	$post = $post_before;
 
-	$classes = '';
+	$classnames = array();
+	// Adds the old class name for styles' backwards compatibility.
+	if ( isset( $attributes['legacy'] ) ) {
+		$classnames[] = 'wp-block-post-comments';
+	}
 	if ( isset( $attributes['textAlign'] ) ) {
-		$classes .= 'has-text-align-' . $attributes['textAlign'];
+		$classnames[] = 'has-text-align-' . $attributes['textAlign'];
 	}
 
-	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $classes ) );
+	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => implode(' ', $classnames ) ) );
 	$output             = ob_get_clean();
 
 	wp_enqueue_script( 'comment-reply' );
@@ -183,4 +187,4 @@ function gutenberg_register_legacy_post_comments_block() {
 		)
 	);
 }
-add_action( 'init', 'gutenberg_register_legacy_post_comments_block', );
+add_action( 'init', 'gutenberg_register_legacy_post_comments_block', 21);

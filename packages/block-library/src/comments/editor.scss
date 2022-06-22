@@ -1,3 +1,7 @@
 .block-library-comments-toolbar__popover .components-popover__content {
 	min-width: 230px;
 }
+
+.wp-block-post-comments__placeholder * {
+	pointer-events: none;
+}
