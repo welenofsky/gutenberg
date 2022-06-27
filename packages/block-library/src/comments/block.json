@@ -29,10 +29,5 @@
 		}
 	},
 	"editorStyle": "wp-block-comments-editor",
-	"style": [
-		"wp-block-post-comments",
-		"wp-block-buttons",
-		"wp-block-button"
-	],
 	"usesContext": [ "postId", "postType" ]
 }

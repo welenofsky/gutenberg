@@ -65,6 +65,7 @@ function render_block_core_comments_query_loop( $attributes, $content, $block ) 
 	$output             = ob_get_clean();
 
 	wp_enqueue_script( 'comment-reply' );
+	enqueue_legacy_post_comments_block_styles( $block->name );
 
 	return sprintf( '<div %1$s>%2$s</div>', $wrapper_attributes, $output );
 }
@@ -99,6 +100,27 @@ function comments_query_loop_block_form_defaults( $fields ) {
 	return $fields;
 }
 add_filter( 'comment_form_defaults', 'comments_query_loop_block_form_defaults' );
+
+/**
+ * Enqueues styles for the legacy `core/post-comments` block.
+ *
+ * @param string $block_name Name of the new block type.
+ */
+function enqueue_legacy_post_comments_block_styles( $block_name ) {
+	static $are_styles_enqueued = false;
+
+	if ( ! $are_styles_enqueued ) {
+		$handles = array(
+			'wp-block-post-comments',
+			'wp-block-buttons',
+			'wp-block-button',
+		);
+		foreach( $handles as $handle ) {
+			wp_enqueue_block_style( $block_name, array( 'handle' => $handle) );
+		}
+		$are_styles_enqueued = true;
+	}
+}
 
 /**
  * Renders the legacy `core/post-comments` block on the server.
