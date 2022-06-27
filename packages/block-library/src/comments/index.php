@@ -102,7 +102,8 @@ function comments_query_loop_block_form_defaults( $fields ) {
 add_filter( 'comment_form_defaults', 'comments_query_loop_block_form_defaults' );
 
 /**
- * Enqueues styles for the legacy `core/post-comments` block.
+ * Enqueues styles from the legacy `core/post-comments` block. These styles are
+ * required by the block's fallback.
  *
  * @param string $block_name Name of the new block type.
  */
