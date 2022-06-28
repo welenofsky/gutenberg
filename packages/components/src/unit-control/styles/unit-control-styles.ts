@@ -108,6 +108,8 @@ export const UnitLabel = styled.div< SelectProps >`
 		pointer-events: none;
 
 		${ baseUnitLabelStyles };
+
+		color: ${ COLORS.gray[ 900 ] };
 	}
 `;
 
