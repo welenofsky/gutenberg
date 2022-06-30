@@ -25,7 +25,7 @@ const INSERTION_INPUT_TYPES_TO_IGNORE = new Set( [
 	'insertLink',
 ] );
 
-const EMPTY_ACTIVE_FORMATS = [];
+export const EMPTY_ACTIVE_FORMATS = [];
 
 /**
  * If the selection is set on the placeholder element, collapse the selection to

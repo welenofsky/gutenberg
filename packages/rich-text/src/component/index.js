@@ -11,13 +11,17 @@ import { useRegistry } from '@wordpress/data';
 import { create } from '../create';
 import { apply } from '../to-dom';
 import { toHTMLString } from '../to-html-string';
+import { getActiveFormats } from '../get-active-formats';
 import { useDefaultStyle } from './use-default-style';
 import { useBoundaryStyle } from './use-boundary-style';
 import { useCopyHandler } from './use-copy-handler';
 import { useFormatBoundaries } from './use-format-boundaries';
 import { useSelectObject } from './use-select-object';
 import { useIndentListItemOnSpace } from './use-indent-list-item-on-space';
-import { useInputAndSelection } from './use-input-and-selection';
+import {
+	useInputAndSelection,
+	EMPTY_ACTIVE_FORMATS,
+} from './use-input-and-selection';
 import { useDelete } from './use-delete';
 import { useSpace } from './use-space';
 
@@ -95,6 +99,10 @@ export function useRichText( {
 		}
 		record.current.start = selectionStart;
 		record.current.end = selectionEnd;
+		record.current.activeFormats = getActiveFormats(
+			record.current,
+			EMPTY_ACTIVE_FORMATS
+		);
 	}
 
 	const hadSelectionUpdate = useRef( false );
