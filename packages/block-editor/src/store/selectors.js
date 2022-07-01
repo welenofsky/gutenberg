@@ -1879,6 +1879,7 @@ const buildBlockTypeItem =
 			category: blockType.category,
 			keywords: blockType.keywords,
 			variations: inserterVariations,
+			workflows: blockType.workflows,
 			example: blockType.example,
 			utility: 1, // Deprecated.
 		};
@@ -1998,6 +1999,7 @@ export const getInserterItems = createSelector(
 
 		const items = blockTypeInserterItems.reduce( ( accumulator, item ) => {
 			const { variations = [] } = item;
+
 			// Exclude any block type item that is to be replaced by a default variation.
 			if ( ! variations.some( ( { isDefault } ) => isDefault ) ) {
 				accumulator.push( item );
@@ -2006,6 +2008,29 @@ export const getInserterItems = createSelector(
 				const variationMapper = getItemFromVariation( state, item );
 				accumulator.push( ...variations.map( variationMapper ) );
 			}
+
+			const { workflows } = item;
+
+			if ( workflows?.length ) {
+				workflows.forEach( ( workflow ) => {
+					const workflowId = `${ item.id }/workflow/${ workflow.id }`;
+					const { time, count = 0 } =
+						getInsertUsage( state, workflowId ) || {};
+					const frecency = calculateFrecency( time, count );
+
+					accumulator.push( {
+						id: workflowId,
+						name: item.name,
+						title: workflow.title,
+						icon: workflow.icon,
+						category: 'theme',
+						keywords: item.keywords,
+						isDisabled: false,
+						frecency,
+					} );
+				} );
+			}
+
 			return accumulator;
 		}, [] );
 
