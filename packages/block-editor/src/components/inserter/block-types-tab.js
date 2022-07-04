@@ -37,7 +37,7 @@ export function BlockTypesTab( {
 	onHover,
 	showMostUsedBlocks,
 } ) {
-	const [ items, categories, collections, workflows, onSelectItem ] =
+	const [ items, categories, collections, onSelectItem, workflows ] =
 		useBlockTypesState( rootClientId, onInsert );
 
 	const suggestedItems = useMemo( () => {
