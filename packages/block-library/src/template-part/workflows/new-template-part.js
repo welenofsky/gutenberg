@@ -10,12 +10,19 @@ import { useAsyncList } from '@wordpress/compose';
 import { useSelect } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 
+/**
+ * Internal dependencies
+ */
+import { useTemplatePartArea } from '../edit/utils/hooks';
+
 export default function NewTemplatePartWorkflow( {
 	area,
 	onFinish,
 	rootClientId,
 	insertBlocks,
 } ) {
+	const areaObject = useTemplatePartArea( area );
+
 	const blockPatterns = useSelect(
 		( select ) => {
 			const blockNameWithArea = area
@@ -38,7 +45,7 @@ export default function NewTemplatePartWorkflow( {
 			title={ sprintf(
 				// Translators: %s as template part area title ("Header", "Footer", etc.).
 				__( 'Choose a %s' ),
-				area?.label.toLowerCase() ?? __( 'template part' )
+				areaObject?.label.toLowerCase() ?? __( 'template part' )
 			) }
 			closeLabel={ __( 'Cancel' ) }
 			onRequestClose={ onFinish }
