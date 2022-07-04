@@ -103,6 +103,7 @@ export function BlockTypesTab( {
 				{ !! workflows?.length && (
 					<InserterPanel title={ _x( 'Workflows', 'blocks' ) }>
 						<WorkflowsList
+							rootClientId={ rootClientId }
 							items={ workflows }
 							onSelect={ onSelectItem }
 							label={ _x( 'Workflows', 'blocks' ) }

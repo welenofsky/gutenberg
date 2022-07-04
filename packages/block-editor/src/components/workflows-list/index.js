@@ -8,13 +8,20 @@ import { useState } from '@wordpress/element';
  */
 import BlockTypesList from '../block-types-list';
 
-function Workflow( { workflow, onFinish } ) {
+function Workflow( { rootClientId, workflow, onFinish } ) {
 	const { flow: Component } = workflow;
-	return <Component onFinish={ onFinish } workflow={ workflow } />;
+	return (
+		<Component
+			rootClientId={ rootClientId }
+			workflow={ workflow }
+			onFinish={ onFinish }
+		/>
+	);
 }
 
 export default function WorkflowsList( props ) {
 	const [ activeWorkflow, setActiveWorkflow ] = useState();
+	const { rootClientId } = props;
 
 	return (
 		<>
@@ -27,6 +34,7 @@ export default function WorkflowsList( props ) {
 			/>
 			{ !! activeWorkflow && (
 				<Workflow
+					rootClientId={ rootClientId }
 					workflow={ activeWorkflow }
 					onFinish={ () => setActiveWorkflow( undefined ) }
 				/>
