@@ -12,7 +12,7 @@ import { __, sprintf } from '@wordpress/i18n';
 
 export default function NewTemplatePartWorkflow( {
 	area,
-	exitWorkflow,
+	onFinish,
 	rootClientId,
 	insertBlocks,
 } ) {
@@ -41,7 +41,7 @@ export default function NewTemplatePartWorkflow( {
 				area?.label.toLowerCase() ?? __( 'template part' )
 			) }
 			closeLabel={ __( 'Cancel' ) }
-			onRequestClose={ exitWorkflow }
+			onRequestClose={ onFinish }
 		>
 			<BlockPatternsList
 				blockPatterns={ blockPatterns }

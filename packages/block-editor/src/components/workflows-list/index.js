@@ -8,8 +8,9 @@ import { useState } from '@wordpress/element';
  */
 import BlockTypesList from '../block-types-list';
 
-function Workflow() {
-	return 'test';
+function Workflow( { workflow, onFinish } ) {
+	const { flow: Component } = workflow;
+	return <Component onFinish={ onFinish } workflow={ workflow } />;
 }
 
 export default function WorkflowsList( props ) {
