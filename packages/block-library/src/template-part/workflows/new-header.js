@@ -4,5 +4,5 @@
 import NewTemplatePartWorkflow from './new-template-part';
 
 export default function NewHeaderWorkflow( props ) {
-	return <NewTemplatePartWorkflow { ...props } />;
+	return <NewTemplatePartWorkflow area="header" { ...props } />;
 }
