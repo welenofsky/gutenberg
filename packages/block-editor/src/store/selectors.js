@@ -1879,7 +1879,6 @@ const buildBlockTypeItem =
 			category: blockType.category,
 			keywords: blockType.keywords,
 			variations: inserterVariations,
-			workflows: blockType.workflows,
 			example: blockType.example,
 			utility: 1, // Deprecated.
 		};
