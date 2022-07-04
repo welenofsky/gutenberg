@@ -30,6 +30,7 @@ import {
 	postDate,
 	search,
 	tag,
+	layout as customGenericTemplateIcon,
 } from '@wordpress/icons';
 import { __, sprintf } from '@wordpress/i18n';
 import { store as noticesStore } from '@wordpress/notices';
@@ -38,6 +39,7 @@ import { store as noticesStore } from '@wordpress/notices';
  * Internal dependencies
  */
 import AddCustomTemplateModal from './add-custom-template-modal';
+import AddCustomGenericTemplateModal from './add-custom-generic-template-modal';
 import { usePostTypes, usePostTypesEntitiesInfo } from './utils';
 import { useHistory } from '../routes';
 import { store as editSiteStore } from '../../store';
@@ -78,6 +80,10 @@ export default function NewTemplate( { postType } ) {
 	const postTypes = usePostTypes();
 	const [ showCustomTemplateModal, setShowCustomTemplateModal ] =
 		useState( false );
+	const [
+		showCustomGenericTemplateModal,
+		setShowCustomGenericTemplateModal,
+	] = useState( false );
 	const [ entityForSuggestions, setEntityForSuggestions ] = useState( {} );
 	const { existingTemplates, defaultTemplateTypes } = useSelect(
 		( select ) => ( {
@@ -96,7 +102,7 @@ export default function NewTemplate( { postType } ) {
 	const { createErrorNotice } = useDispatch( noticesStore );
 	const { setTemplate } = useDispatch( editSiteStore );
 
-	async function createTemplate( template ) {
+	async function createTemplate( template, isWPSuggestion = true ) {
 		try {
 			const { title, description, slug } = template;
 			const newTemplate = await saveEntityRecord(
@@ -109,7 +115,7 @@ export default function NewTemplate( { postType } ) {
 					status: 'publish',
 					title,
 					// This adds a post meta field in template that is part of `is_custom` value calculation.
-					is_wp_suggestion: true,
+					is_wp_suggestion: isWPSuggestion,
 				},
 				{ throwOnError: true }
 			);
@@ -253,6 +259,19 @@ export default function NewTemplate( { postType } ) {
 								);
 							} ) }
 						</MenuGroup>
+						<MenuItem
+							icon={ customGenericTemplateIcon }
+							iconPosition="left"
+							info={ __(
+								'Custom templates can be applied to any post or page.'
+							) }
+							key="custom-template"
+							onClick={ () =>
+								setShowCustomGenericTemplateModal( true )
+							}
+						>
+							{ __( 'Custom template' ) }
+						</MenuItem>
 					</NavigableMenu>
 				) }
 			</DropdownMenu>
@@ -261,6 +280,12 @@ export default function NewTemplate( { postType } ) {
 					onClose={ () => setShowCustomTemplateModal( false ) }
 					onSelect={ createTemplate }
 					entityForSuggestions={ entityForSuggestions }
+				/>
+			) }
+			{ showCustomGenericTemplateModal && (
+				<AddCustomGenericTemplateModal
+					onClose={ () => setShowCustomGenericTemplateModal( false ) }
+					createTemplate={ createTemplate }
 				/>
 			) }
 		</>
