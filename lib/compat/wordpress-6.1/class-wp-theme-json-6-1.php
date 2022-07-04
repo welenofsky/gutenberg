@@ -705,4 +705,64 @@ class WP_Theme_JSON_6_1 extends WP_Theme_JSON_6_0 {
 
 		return implode( ', ', $selectors_scoped );
 	}
+
+	/**
+	 * Function that returns presets css variables scoped to a given selector.
+	 * Similar to get_css_variables but with added scoping.
+	 *
+	 * @param string $scope Selector to scope to.
+	 * @return string A stylesheet with the preset variables.
+	 */
+	public function get_scoped_css_variables( $scope ) {
+		$blocks_metadata    = static::get_blocks_metadata();
+		$setting_nodes      = static::get_setting_nodes( $this->theme_json, $blocks_metadata );
+
+		// the root selector needs to target every possible block selector
+		// in order for the general setting to overwrite any bock specific setting of a parent block or
+		// the site root.
+		$default_selector = ',[class*="wp-block"]';
+		$registry         = WP_Block_Type_Registry::get_instance();
+		$blocks           = $registry->get_all_registered();
+		foreach ( $blocks as $block_name => $block_type ) {
+			if (
+				isset( $block_type->supports['__experimentalSelector'] ) &&
+				is_string( $block_type->supports['__experimentalSelector'] )
+			) {
+				$default_selector .= ','.$block_type->supports['__experimentalSelector'];
+			}
+		}
+
+		// make the root node use the default selector for this section.
+		$setting_nodes[0]['selector'] = $default_selector;
+
+		// scope every selector.
+		foreach( $setting_nodes as &$node) {
+			$node['selector'] = static::scope_selector( $scope, $node['selector'] );
+		}
+
+		$styles = $this->get_css_variables( $setting_nodes, static::VALID_ORIGINS );
+		return $styles;
+	}
+
+	/**
+	 * Function that returns presets css classes scoped to a given selector.
+	 * Similar to get_preset_classes but with added scoping.
+	 *
+	 * @param string $scope Selector to scope to.
+	 * @return string A stylesheet with the preset class rules.
+	 */
+	public function get_scoped_css_classes( $scope ) {
+		$blocks_metadata    = static::get_blocks_metadata();
+		$setting_nodes      = static::get_setting_nodes( $this->theme_json, $blocks_metadata );
+
+		// scope every selector.
+		foreach( $setting_nodes as &$node) {
+			$node['selector'] = static::scope_selector( $scope, $node['selector'] );
+		}
+
+		// make the root node use the scope selector for this section.
+		$setting_nodes[0]['selector'] =  $scope;
+
+		return $this->get_preset_classes( $setting_nodes, static::VALID_ORIGINS );
+	}
 }

@@ -85,6 +85,8 @@ function gutenberg_render_descendent_block_styles_support_styles( $pre_render, $
 		return null;
 	}
 
+	$block_settings = _wp_array_get( $block, array( 'attrs', 'settings' ), null );
+
 	$class_name = gutenberg_get_block_styles_class_name( $block );
 
 	// Remove any potentially unsafe styles.
@@ -93,16 +95,24 @@ function gutenberg_render_descendent_block_styles_support_styles( $pre_render, $
 		'styles' => array(
 			'blocks' => $block_styles,
 		),
+		'settings' => $block_settings,
 	) );
+	$theme_json_object = new WP_Theme_JSON_Gutenberg( $theme_json_shape );
 
 	$styles = '';
 
-	$theme_json_object = new WP_Theme_JSON_Gutenberg( $theme_json_shape );
-	$block_nodes       = $theme_json_object->get_styles_block_nodes();
+	// include preset css variables declaration on the stylesheet.
+	$styles .= $theme_json_object->get_scoped_css_variables( $class_name );
+
+	// include block styles on the stylesheet.
+	$block_nodes = $theme_json_object->get_styles_block_nodes();
 	foreach ( $block_nodes as $block_node ) {
 		$block_node['selector'] = WP_Theme_JSON_Gutenberg::scope_selector( '.' . $class_name, $block_node['selector'] );
 		$styles .= $theme_json_object->get_styles_for_block( $block_node );
 	}
+
+	// include preset css classes on the the stylesheet.
+	$styles .= $theme_json_object->get_scoped_css_classes( $class_name );
 
 	if ( ! empty( $styles ) ) {
 		gutenberg_enqueue_block_support_styles( $styles );
