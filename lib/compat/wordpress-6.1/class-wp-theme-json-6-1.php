@@ -767,8 +767,8 @@ class WP_Theme_JSON_6_1 extends WP_Theme_JSON_6_0 {
 	 * - prevent_override => Disables override of default presets by theme presets.
 	 *                       The relationship between whether to override the defaults
 	 *                       and whether the defaults are enabled is inverse:
-	 *                         - If defaults are enabled  => theme presets should not be overriden
-	 *                         - If defaults are disabled => theme presets should be overriden
+	 *                         - If defaults are enabled  => theme presets should not be overridden
+	 *                         - If defaults are disabled => theme presets should be overridden
 	 *                       For example, a theme sets defaultPalette to false,
 	 *                       making the default palette hidden from the user.
 	 *                       In that case, we want all the theme presets to be present,
@@ -960,7 +960,7 @@ class WP_Theme_JSON_6_1 extends WP_Theme_JSON_6_0 {
 			}
 
 			$below_sizes[] = array(
-				/* translators: %s: Muliple of t-shirt sizing, eg. 2X-Small */
+				/* translators: %s: Multiple of t-shirt sizing, eg. 2X-Small */
 				'name' => $x === $steps_mid_point - 1 ? __( 'Small', 'gutenberg' ) : sprintf( __( '%sX-Small', 'gutenberg' ), strval( $x_small_count ) ),
 				'slug' => $slug,
 				'size' => round( $current_step, 2 ) . $unit,
@@ -997,7 +997,7 @@ class WP_Theme_JSON_6_1 extends WP_Theme_JSON_6_0 {
 				: ( $spacing_scale['increment'] >= 1 ? $current_step * $spacing_scale['increment'] : $current_step / $spacing_scale['increment'] );
 
 			$above_sizes[] = array(
-				/* translators: %s: Muliple of t-shirt sizing, eg. 2X-Large */
+				/* translators: %s: Multiple of t-shirt sizing, eg. 2X-Large */
 				'name' => 0 === $x ? __( 'Large', 'gutenberg' ) : sprintf( __( '%sX-Large', 'gutenberg' ), strval( $x_large_count ) ),
 				'slug' => $slug,
 				'size' => round( $current_step, 2 ) . $unit,
