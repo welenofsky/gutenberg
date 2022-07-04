@@ -2074,10 +2074,12 @@ export const getInserterWorkflows = createSelector(
 			( workflowsAccumulator, blockType ) => [
 				...workflowsAccumulator,
 				// Omit the `flow` component, this is handled by the `Workflow` component.
-				blockType.workflows.map( ( { flow, ...workflowProps } ) => ( {
-					blockName: blockType.name,
-					...workflowProps,
-				} ) ),
+				...blockType.workflows.map(
+					( { flow, ...workflowProps } ) => ( {
+						blockName: blockType.name,
+						...workflowProps,
+					} )
+				),
 			],
 			[]
 		);
