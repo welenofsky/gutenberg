@@ -22,6 +22,7 @@ export default function WorkflowsList( props ) {
 				onSelect={ ( workflow ) => {
 					setActiveWorkflow( workflow );
 				} }
+				isDraggable={ false }
 			/>
 			{ !! activeWorkflow && (
 				<Workflow
