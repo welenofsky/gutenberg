@@ -10,17 +10,22 @@ import {
 	__experimentalBlockPatternsList as BlockPatternsList,
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
-import { serialize } from '@wordpress/blocks';
+import { parse, serialize } from '@wordpress/blocks';
 import { Modal } from '@wordpress/components';
 import { store as coreStore } from '@wordpress/core-data';
 import { useAsyncList } from '@wordpress/compose';
 import { useDispatch, useSelect } from '@wordpress/data';
+import { useMemo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
-import { useTemplatePartArea } from '../edit/utils/hooks';
+import {
+	useAlternativeTemplateParts,
+	useTemplatePartArea,
+} from '../edit/utils/hooks';
+import { createTemplatePartId } from '../edit/utils/create-template-part-id';
 
 function createTemplatePartPostData(
 	area,
@@ -55,6 +60,17 @@ export default function NewTemplatePartWorkflow( {
 	const { saveEntityRecord } = useDispatch( coreStore );
 	const areaObject = useTemplatePartArea( area );
 
+	const { templateParts } = useAlternativeTemplateParts( area );
+
+	const templartPartsAsBlockPatterns = useMemo( () => {
+		return templateParts.map( ( templatePart ) => ( {
+			name: createTemplatePartId( templatePart.theme, templatePart.slug ),
+			title: templatePart.title.rendered,
+			blocks: parse( templatePart.content.raw ),
+			templatePart,
+		} ) );
+	}, [ templateParts ] );
+
 	const blockPatterns = useSelect(
 		( select ) => {
 			const blockNameWithArea = area
@@ -69,6 +85,8 @@ export default function NewTemplatePartWorkflow( {
 		},
 		[ area, rootClientId ]
 	);
+
+	const shownTemplateParts = useAsyncList( templartPartsAsBlockPatterns );
 	const shownBlockPatterns = useAsyncList( blockPatterns );
 
 	return (
@@ -82,33 +100,57 @@ export default function NewTemplatePartWorkflow( {
 			closeLabel={ __( 'Cancel' ) }
 			onRequestClose={ onFinish }
 		>
-			<BlockPatternsList
-				blockPatterns={ blockPatterns }
-				shownPatterns={ shownBlockPatterns }
-				onClickPattern={ async ( pattern, blocks ) => {
-					const templatePartPostData =
-						await createTemplatePartPostData( area, blocks );
-
-					const templatePart = await saveEntityRecord(
-						'postType',
-						'wp_template_part',
-						templatePartPostData
-					);
-
-					const focusBlock = true;
-					onSelect(
-						{
-							name: 'core/template-part',
-							initialAttributes: {
-								slug: templatePart.slug,
-								theme: templatePart.theme,
+			<div>
+				<h2>{ __( 'Existing template parts' ) }</h2>
+				<BlockPatternsList
+					blockPatterns={ templartPartsAsBlockPatterns }
+					shownPatterns={ shownTemplateParts }
+					onClickPattern={ ( pattern ) => {
+						const focusBlock = true;
+						onSelect(
+							{
+								name: 'core/template-part',
+								initialAttributes: {
+									slug: pattern.templatePart.slug,
+									theme: pattern.templatePart.theme,
+								},
 							},
-						},
-						focusBlock
-					);
-					onFinish();
-				} }
-			/>
+							focusBlock
+						);
+						onFinish();
+					} }
+				/>
+			</div>
+			<div>
+				<h2>{ __( 'Patterns' ) }</h2>
+				<BlockPatternsList
+					blockPatterns={ blockPatterns }
+					shownPatterns={ shownBlockPatterns }
+					onClickPattern={ async ( pattern, blocks ) => {
+						const templatePartPostData =
+							await createTemplatePartPostData( area, blocks );
+
+						const templatePart = await saveEntityRecord(
+							'postType',
+							'wp_template_part',
+							templatePartPostData
+						);
+
+						const focusBlock = true;
+						onSelect(
+							{
+								name: 'core/template-part',
+								initialAttributes: {
+									slug: templatePart.slug,
+									theme: templatePart.theme,
+								},
+							},
+							focusBlock
+						);
+						onFinish();
+					} }
+				/>
+			</div>
 		</Modal>
 	);
 }
