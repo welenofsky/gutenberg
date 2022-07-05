@@ -101,12 +101,13 @@ export function BlockTypesTab( {
 		<InserterListbox>
 			<div>
 				{ !! workflows?.length && (
-					<InserterPanel title={ _x( 'Workflows', 'blocks' ) }>
+					// TODO - this isn't a very general title.
+					<InserterPanel title={ _x( 'Template Parts', 'blocks' ) }>
 						<WorkflowsList
 							rootClientId={ rootClientId }
 							items={ workflows }
 							onSelect={ onSelectItem }
-							label={ _x( 'Workflows', 'blocks' ) }
+							label={ _x( 'Template Parts', 'blocks' ) }
 						/>
 					</InserterPanel>
 				) }
