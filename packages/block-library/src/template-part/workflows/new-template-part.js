@@ -73,7 +73,7 @@ export default function NewTemplatePartWorkflow( {
 
 	return (
 		<Modal
-			className="block-editor-template-part__new-header-workflow"
+			className="block-editor-template-part__selection-modal"
 			title={ sprintf(
 				// Translators: %s as template part area title ("Header", "Footer", etc.).
 				__( 'Choose a %s' ),
