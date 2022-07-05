@@ -100,57 +100,64 @@ export default function NewTemplatePartWorkflow( {
 			closeLabel={ __( 'Cancel' ) }
 			onRequestClose={ onFinish }
 		>
-			<div>
-				<h2>{ __( 'Existing template parts' ) }</h2>
-				<BlockPatternsList
-					blockPatterns={ templartPartsAsBlockPatterns }
-					shownPatterns={ shownTemplateParts }
-					onClickPattern={ ( pattern ) => {
-						const focusBlock = true;
-						onSelect(
-							{
-								name: 'core/template-part',
-								initialAttributes: {
-									slug: pattern.templatePart.slug,
-									theme: pattern.templatePart.theme,
+			{ !! templartPartsAsBlockPatterns.length && (
+				<div>
+					<h2>{ __( 'Existing template parts' ) }</h2>
+					<BlockPatternsList
+						blockPatterns={ templartPartsAsBlockPatterns }
+						shownPatterns={ shownTemplateParts }
+						onClickPattern={ ( pattern ) => {
+							const focusBlock = true;
+							onSelect(
+								{
+									name: 'core/template-part',
+									initialAttributes: {
+										slug: pattern.templatePart.slug,
+										theme: pattern.templatePart.theme,
+									},
 								},
-							},
-							focusBlock
-						);
-						onFinish();
-					} }
-				/>
-			</div>
-			<div>
-				<h2>{ __( 'Patterns' ) }</h2>
-				<BlockPatternsList
-					blockPatterns={ blockPatterns }
-					shownPatterns={ shownBlockPatterns }
-					onClickPattern={ async ( pattern, blocks ) => {
-						const templatePartPostData =
-							await createTemplatePartPostData( area, blocks );
+								focusBlock
+							);
+							onFinish();
+						} }
+					/>
+				</div>
+			) }
+			{ !! blockPatterns.length && (
+				<div>
+					<h2>{ __( 'Patterns' ) }</h2>
+					<BlockPatternsList
+						blockPatterns={ blockPatterns }
+						shownPatterns={ shownBlockPatterns }
+						onClickPattern={ async ( pattern, blocks ) => {
+							const templatePartPostData =
+								await createTemplatePartPostData(
+									area,
+									blocks
+								);
 
-						const templatePart = await saveEntityRecord(
-							'postType',
-							'wp_template_part',
-							templatePartPostData
-						);
+							const templatePart = await saveEntityRecord(
+								'postType',
+								'wp_template_part',
+								templatePartPostData
+							);
 
-						const focusBlock = true;
-						onSelect(
-							{
-								name: 'core/template-part',
-								initialAttributes: {
-									slug: templatePart.slug,
-									theme: templatePart.theme,
+							const focusBlock = true;
+							onSelect(
+								{
+									name: 'core/template-part',
+									initialAttributes: {
+										slug: templatePart.slug,
+										theme: templatePart.theme,
+									},
 								},
-							},
-							focusBlock
-						);
-						onFinish();
-					} }
-				/>
-			</div>
+								focusBlock
+							);
+							onFinish();
+						} }
+					/>
+				</div>
+			) }
 		</Modal>
 	);
 }
