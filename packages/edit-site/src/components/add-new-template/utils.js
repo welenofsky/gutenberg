@@ -12,7 +12,7 @@ import { store as editorStore } from '@wordpress/editor';
 import { decodeEntities } from '@wordpress/html-entities';
 import { useMemo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-import { blockMeta, post } from '@wordpress/icons';
+import { blockMeta, post, postAuthor } from '@wordpress/icons';
 
 /**
  * @typedef IHasNameAndId
@@ -80,6 +80,27 @@ const taxonomyBaseConfig = {
 		),
 };
 export const entitiesConfig = {
+	author: {
+		entityName: 'root',
+		slug: 'user',
+		templateSlug: 'author',
+		recordNamePath: 'name',
+		getOrderBy: ( { search } ) => ( search ? 'relevance' : 'name' ),
+		// `icon` is the `menu_icon` property of a post type. We
+		// only handle `dashicons` for now, even if the `menu_icon`
+		// also supports urls and svg as values.
+		getIcon: () => postAuthor,
+		getTitle: () => __( 'Author' ),
+		getDescription: () =>
+			__( 'Displays latest posts written by a single author.' ),
+		labels: {
+			singular_name: __( 'Author' ),
+			search_items: __( 'Search Authors' ),
+			not_found: __( 'No authors found.' ),
+			all_items: __( 'All Authors' ),
+		},
+		additionalQueryParameters: () => ( { who: 'authors' } ),
+	},
 	postType: {
 		entityName: 'postType',
 		templatePrefix: 'single-',
@@ -347,3 +368,33 @@ export const useExtraTemplates = (
 	);
 	return extraTemplates;
 };
+
+export function useAuthorTemplate( onClickMenuItem ) {
+	const existingTemplates = useExistingTemplates();
+	return useMemo( () => {
+		const authorEntity = entitiesConfig.author;
+		return [
+			{
+				slug: authorEntity.slug,
+				templateSlug: authorEntity.templateSlug,
+				title: authorEntity.getTitle(),
+				icon: authorEntity.getIcon(),
+				description: authorEntity.getDescription(),
+				onClick( template ) {
+					onClickMenuItem( {
+						...authorEntity,
+						type: authorEntity.entityName,
+						config: authorEntity,
+						hasGeneralTemplate: !! existingTemplates.find(
+							( { slug } ) => slug === authorEntity.templateSlug
+						),
+						template: {
+							...template,
+							slug: authorEntity.templateSlug,
+						},
+					} );
+				},
+			},
+		];
+	}, [ existingTemplates, onClickMenuItem ] );
+}

@@ -108,6 +108,9 @@ function useSearchSuggestions( entityForSuggestions, search ) {
 			orderBy: config.getOrderBy( { search } ),
 			exclude: postsToExclude,
 			per_page: search ? 20 : 10,
+			...( config.additionalQueryParameters
+				? config.additionalQueryParameters( { search } )
+				: {} ),
 		} ),
 		[ search, config, postsToExclude ]
 	);

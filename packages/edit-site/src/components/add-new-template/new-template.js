@@ -41,6 +41,7 @@ import {
 	useTaxonomyCategory,
 	useTaxonomyTag,
 	useExtraTemplates,
+	useAuthorTemplate,
 } from './utils';
 import { useHistory } from '../routes';
 import { store as editSiteStore } from '../../store';
@@ -229,17 +230,21 @@ function useMissingTemplates(
 		entitiesConfig.tag,
 		onClickMenuItem
 	);
+	const authorMenuItem = useAuthorTemplate( onClickMenuItem );
+
 	// We need to replace existing default template types with
 	// the create specific template functionality. The original
 	// info (title, description, etc.) is preserved in the
 	// `useExtraTemplates` hook.
 	const enhancedMissingDefaultTemplateTypes = [ ...missingDefaultTemplates ];
-	[ categoryMenuItem, tagMenuItem ].forEach( ( menuItem ) => {
+	[ categoryMenuItem, tagMenuItem, authorMenuItem ].forEach( ( menuItem ) => {
 		if ( ! menuItem?.length ) {
 			return;
 		}
 		const matchIndex = enhancedMissingDefaultTemplateTypes.findIndex(
-			( template ) => template.slug === menuItem[ 0 ].slug
+			( template ) =>
+				template.slug === menuItem[ 0 ].templateSlug ||
+				template.slug === menuItem[ 0 ].slug
 		);
 		// Some default template types might have been filtered above from
 		// `missingDefaultTemplates` because they only check for the general
