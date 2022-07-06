@@ -6,6 +6,8 @@ import {
 	UIManager,
 	TouchableWithoutFeedback,
 	Platform,
+	NativeModules,
+	findNodeHandle,
 } from 'react-native';
 
 /**
@@ -20,6 +22,14 @@ import { ENTER, BACKSPACE } from '@wordpress/keycodes';
 import * as AztecInputState from './AztecInputState';
 
 const AztecManager = UIManager.getViewManagerConfig( 'RCTAztecView' );
+
+let isLoaded = false;
+
+if ( ! isLoaded ) {
+	const result = NativeModules.SimpleJsi?.install();
+	console.log( 'SimpleJsi isLoaded:', result );
+	isLoaded = true;
+}
 
 class AztecView extends Component {
 	constructor() {
@@ -40,6 +50,22 @@ class AztecView extends Component {
 		this._onAztecFocus = this._onAztecFocus.bind( this );
 		this.blur = this.blur.bind( this );
 		this.focus = this.focus.bind( this );
+	}
+
+	componentDidMount() {
+		const viewId = findNodeHandle( this.aztecViewRef.current );
+		// Register handler for this Aztec view
+		global.registerAztecHandler(
+			viewId,
+			( eventName, content, selectionStart, selectionEnd ) => {
+				console.log( 'Aztec handler', {
+					eventName,
+					content,
+					selectionStart,
+					selectionEnd,
+				} );
+			}
+		);
 	}
 
 	dispatch( command, params ) {

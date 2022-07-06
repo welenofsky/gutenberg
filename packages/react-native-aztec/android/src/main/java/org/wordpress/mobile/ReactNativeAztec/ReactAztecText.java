@@ -18,6 +18,7 @@ import android.text.InputType;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.textinput.ContentSizeWatcher;
 import com.facebook.react.views.textinput.ReactTextInputLocalData;
 import com.facebook.react.views.textinput.ScrollWatcher;
+import com.reactnativesimplejsi.SimpleJsiModule;
 
 import org.wordpress.android.util.AppLog;
 import org.wordpress.aztec.AlignmentRendering;
@@ -371,12 +373,20 @@ public class ReactAztecText extends AztecText {
         if (!shouldHandleOnSelectionChange) {
             return;
         }
-        String content = toHtml(getText(), false);
+
+        Log.d("TEST", "propagateSelectionChanges: " + getId());
+
         ReactContext reactContext = (ReactContext) getContext();
-        EventDispatcher eventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
-        eventDispatcher.dispatchEvent(
-                new ReactAztecSelectionChangeEvent(getId(), content, selStart, selEnd, incrementAndGetEventCounter())
-        );
+        String content = toHtml(getText(), false);
+
+        // Send content and selection to JS side via JSI
+        SimpleJsiModule jsiModule = reactContext.getNativeModule(SimpleJsiModule.class);
+        new Handler(reactContext.getMainLooper()).post(() -> jsiModule.sendEvent(getId(), "selectionChangeEvent", content, selStart, selEnd));
+
+        // EventDispatcher eventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
+        // eventDispatcher.dispatchEvent(
+        //         new ReactAztecSelectionChangeEvent(getId(), content, selStart, selEnd, incrementAndGetEventCounter())
+        // );
     }
 
     @Override

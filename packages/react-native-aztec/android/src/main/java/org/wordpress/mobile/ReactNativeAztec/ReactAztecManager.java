@@ -45,6 +45,7 @@ import com.facebook.react.views.textinput.ReactContentSizeChangedEvent;
 import com.facebook.react.views.textinput.ReactTextInputEvent;
 import com.facebook.react.views.textinput.ReactTextInputManager;
 import com.facebook.react.views.textinput.ScrollWatcher;
+import com.reactnativesimplejsi.SimpleJsiModule;
 
 import org.wordpress.aztec.Constants;
 import org.wordpress.aztec.formatting.LinkFormatter;
@@ -88,6 +89,8 @@ public class ReactAztecManager extends BaseViewManager<ReactAztecText, LayoutSha
 
     @Nullable private final Consumer<Exception> exceptionLogger;
     @Nullable private final Consumer<String> breadcrumbLogger;
+
+    @Nullable private String internalId;
 
     public ReactAztecManager(@Nullable Consumer<Exception> exceptionLogger, @Nullable Consumer<String> breadcrumbLogger) {
         this.exceptionLogger = exceptionLogger;
@@ -626,6 +629,11 @@ public class ReactAztecManager extends BaseViewManager<ReactAztecText, LayoutSha
         else {
             view.setInputType((view.getInputType() & ~InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS) | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
         }
+    }
+
+    @ReactProp(name = "aztecId")
+    public void aztecId(final ReactAztecText view, String id) {
+        internalId = id;
     }
 
     @Override
