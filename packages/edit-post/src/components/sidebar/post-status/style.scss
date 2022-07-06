@@ -1,5 +1,31 @@
-.edit-post-post-status .edit-post-post-publish-dropdown__switch-to-draft {
-	margin-top: 15px;
-	width: 100%;
-	text-align: center;
+.edit-post-post-status__header {
+	.components-dropdown-menu {
+		line-height: 0;
+		margin: -$grid-unit-05 0;
+	}
+
+	[class][class].components-dropdown-menu__toggle {
+		min-width: $grid-unit-30;
+		padding: 0;
+	}
+}
+
+[class].edit-post-post-status__heading {
+	font-weight: 500;
+	margin: 0;
+}
+
+[class][class].edit-post-post-status__revisions-count-badge {
+	align-items: center;
+	background: $gray-800;
+	border-radius: 2px;
+	color: $white;
+	display: inline-flex;
+	justify-content: center;
+	min-height: $icon-size;
+	min-width: $icon-size;
+}
+
+[class].edit-post-post-status__post-trash {
+	box-shadow: none;
 }
