@@ -106,6 +106,13 @@ export const entitiesConfig = {
 	taxonomy: {
 		...taxonomyBaseConfig,
 		templatePrefix: 'taxonomy-',
+		getDescription: ( labels, slug ) =>
+			sprintf(
+				// translators: %1s: Name of the taxonomy e.g: "Product Categories"; %2s: Slug of the taxonomy e.g: "product-categories".
+				__( 'Displays a single taxonomy: %1$s (%2$s).' ),
+				labels.singular_name,
+				slug
+			),
 	},
 	category: { ...taxonomyBaseConfig },
 	tag: { ...taxonomyBaseConfig, templateSlug: 'tag' },
@@ -317,7 +324,10 @@ export const useExtraTemplates = (
 				: {
 						slug: generalTemplateSlug,
 						title: entityConfig.getTitle( labels ),
-						description: entityConfig.getDescription( labels ),
+						description: entityConfig.getDescription(
+							labels,
+							slug
+						),
 						icon: entityConfig.getIcon?.( icon ),
 				  };
 			const hasEntities = entitiesInfo?.[ slug ]?.hasEntities;
