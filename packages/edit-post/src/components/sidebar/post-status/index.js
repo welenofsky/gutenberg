@@ -24,6 +24,9 @@ import PostURL from '../post-url';
 const PANEL_NAME = 'post-status';
 
 export default function PostStatus() {
+	// We use isEditorPanelRemoved to hide the panel if it was programatically
+	// removed. We do not use isEditorPanelEnabled since this panel should not
+	// be disabled through the UI.
 	const isRemoved = useSelect(
 		( select ) =>
 			select( editPostStore ).isEditorPanelRemoved( PANEL_NAME ),
