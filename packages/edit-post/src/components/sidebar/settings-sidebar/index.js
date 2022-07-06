@@ -15,7 +15,6 @@ import { store as interfaceStore } from '@wordpress/interface';
  */
 import SettingsHeader from '../settings-header';
 import PostStatus from '../post-status';
-import LastRevision from '../last-revision';
 import PostTaxonomies from '../post-taxonomies';
 import FeaturedImage from '../featured-image';
 import PostExcerpt from '../post-excerpt';
@@ -85,7 +84,6 @@ const SettingsSidebar = () => {
 				<>
 					<PostStatus />
 					<PluginDocumentSettingPanel.Slot />
-					<LastRevision />
 					<PostTaxonomies />
 					<FeaturedImage />
 					<PostExcerpt />
